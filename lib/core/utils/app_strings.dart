@@ -1,3 +1,4 @@
 class AppStrings{
-  static const APP_NAME='String Calc';
+  static const appName='String Calc';
+  static const enterName='Enter numbers';
 }
