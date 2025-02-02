@@ -1,0 +1,72 @@
+name: Flutter CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze code
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Build AAB
+        run: flutter build appbundle --release
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-builds
+          path: build/app/outputs/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0
+
+      - name: Install Fastlane
+        run: gem install fastlane
+
+      - name: Deploy to Google Play
+        run: fastlane android beta
+        env:
+          GOOGLE_PLAY_JSON_KEY: ${{ secrets.GOOGLE_PLAY_JSON_KEY }}
