@@ -1,0 +1,15 @@
+What is your first and last name?
+  [Unknown]:  maulik rajpara
+What is the name of your organizational unit?
+  [Unknown]:  maulik rajpara
+What is the name of your organization?
+  [Unknown]:  maulik rajpara
+What is the name of your City or Locality?
+  [Unknown]:  bengaluru
+What is the name of your State or Province?
+  [Unknown]:  KA
+What is the two-letter country code for this unit?
+  [Unknown]:  91
+Is CN=maulik rajpara, OU=maulik rajpara, O=maulik rajpara, L=bengaluru, ST=KA, C=91 correct
+Password : stringcal
+key alias : stringcal
